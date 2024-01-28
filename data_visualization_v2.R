@@ -17,3 +17,4 @@ yrbss_samp |>
 
 
 yrbss_samp$strength_training_7d
+%>% 
