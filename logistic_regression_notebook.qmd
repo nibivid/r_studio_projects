@@ -1,0 +1,74 @@
+---
+title: "logistic_regression"
+author: "lastie"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(tidyverse)
+library(MASS)
+library(ISLR)
+library(ISLR2)
+library(nnet)### get this if you don't
+library(e1071) ## get this if you don't
+library(openintro)
+
+## make a dummy for default
+```
+
+library(openintro)You can add options to executable code like this
+
+```{r}
+#| echo: false
+```
+
+```{r}
+Credit <- ISLR2::Credit
+Credit
+```
+
+```{r}
+
+Credit|>
+  mutate(
+    gender_encod = ifelse(
+      Own == "Yes",
+      1,0
+    )
+  )-> def_dum
+  
+  
+  
+# Creating the dummy variables
+def_dum |>
+  mutate(
+    student_encod = ifelse(
+      Student == "Yes",
+      1,0
+    )
+  )-> def_dum
+```
+
+```{r}
+## Run the logistic regression
+
+glm(
+  def_dum ~ Region,
+  data = def_dum,
+  family = binomial
+)|>
+  broom::augment(type.predict = "response")-> df
+
+
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
