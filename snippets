@@ -1,1 +1,73 @@
 
+
+#importing data manipulation
+library(dplyr)
+library(ggplot2)
+library(tidyverse)
+library(ISLR2)
+
+#importing dataset
+Auto =ISLR2::Auto
+
+#Q6
+
+adjusted_auto <- Auto %>%
+  mutate(car_origin = case_when(
+    origin == 1 ~ "American",
+    origin == 2 ~ "European",
+    origin == 3 ~ "Japanese",
+    TRUE ~ "Other"  
+  ))
+
+
+
+ggplot(data = adjusted_auto) + 
+  geom_boxplot(
+    aes(x = car_origin, y = weight),
+    alpha = 0.5,
+    fill = "steelblue"
+  ) +
+  geom_jitter(
+    aes(x = car_origin, y = weight),  # Match x-axis with boxplot
+    alpha = 0.5,
+    color = "steelblue",
+    width = 0.2  # Adjust jitter width for clarity 
+  ) +
+  annotate("text", 
+           x = 3, y = 3000,  # Adjust position for better visibility
+           label = "The heaviest Japanese made car is \n less heavy than the \n median American car.", 
+           color = "black", size = 4) +  # Smaller size for less intrusiveness
+  labs(x = "Car Origin", y = "Weight in Pounds(lbs)") # Clearer labels
+
+
+  
+#drawing a regression 
+library(broom)  
+
+# Fit the regression model (adjust column names if needed)
+lm(acceleration ~ weight, data = adjusted_auto) -> prediction
+
+# Visualize the model
+ggplot(data = broom::augment(prediction)) +
+  geom_point(aes(x = weight, y = acceleration), alpha = 0.5) +  # Adjust x and y if needed
+  geom_line(aes(x = weight, y = .fitted), color = "blue") +   # Add color for clarity
+  labs(x = "Weight in pounds", y = "Acceleration")  # Add labels
+
+
+library(ggplot2) 
+library(ggplot2) 
+library(broom)  
+
+# Fit the interaction model 
+lm(acceleration ~ weight * car_origin, data = adjusted_auto) -> prediction
+
+# Visualize with separate lines for each origin
+ggplot(data = broom::augment(prediction)) +
+  geom_point(aes(x = weight, y = acceleration, color = car_origin), alpha = 0.5) + 
+  geom_line(aes(x = weight, y = .fitted, color = car_origin), size = 1) +  # Size for clarity
+  labs(x = "Weight in pounds", y = "Acceleration", color = "Origin") +   # Legend label 
+  theme(legend.position = "bottom") # Adjust legend position as needed
+
+
+
+
