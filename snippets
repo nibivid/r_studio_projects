@@ -39,21 +39,6 @@ ggplot(data = adjusted_auto) +
   labs(x = "Car Origin", y = "Weight in Pounds(lbs)") # Clearer labels
 
 
-  
-#drawing a regression 
-library(broom)  
-
-# Fit the regression model (adjust column names if needed)
-lm(acceleration ~ weight, data = adjusted_auto) -> prediction
-
-# Visualize the model
-ggplot(data = broom::augment(prediction)) +
-  geom_point(aes(x = weight, y = acceleration), alpha = 0.5) +  # Adjust x and y if needed
-  geom_line(aes(x = weight, y = .fitted), color = "blue") +   # Add color for clarity
-  labs(x = "Weight in pounds", y = "Acceleration")  # Add labels
-
-
-
 
 # Fit the interaction model 
 lm(acceleration ~ weight * car_origin, data = adjusted_auto) -> prediction
@@ -64,8 +49,4 @@ ggplot(data = broom::augment(prediction)) +
   geom_line(aes(x = weight, y = .fitted, color = car_origin), size = 1) +  # Size for clarity
   labs(x = "Weight in pounds", y = "Acceleration", color = "Origin") +   # Legend label 
   theme(legend.position = "bottom") # Adjust legend position as needed
-
-
-
-#Q8
 
