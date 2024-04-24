@@ -1,0 +1,8 @@
+census_data_selected <- select(census_data, state_fips_code, age)
+census_data_renamed <- rename(census_data_selected, state = state_fips_code)
+census_data_arranged <- arrange(census_data_renamed, state)
+census_data_filtered <- filter(census_data_arranged, age >= 40)
+
+
+
+  
