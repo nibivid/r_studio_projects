@@ -6,3 +6,53 @@ census_data_filtered <- filter(census_data_arranged, age >= 40)
 
 
   
+#building pipeline 
+census_data_selected <- select(
+  census_data,
+  state_fips_code,age
+  )
+
+census_data_renamed <- rename(
+  census_data_selected,
+  state = state_fips_code
+  )
+
+census_data_arranged <- arrange(
+  census_data_renamed, 
+  state
+  )
+
+census_data_filtered <- filter(
+  census_data_arranged,
+  age >= 40
+  )
+
+census_data |>
+  select(state_fips_code, age) |>
+  rename(state = state_fips_code) |>
+  arrange(census_data_renamed, state) |>
+  filter(census_data_arranged, age >= 40)
+
+
+
+#using case_when 
+census_data |>
+  mutate(
+    income_category = case_when(
+      total_family_income >= 0 &
+        total_family_income < 40000 ~ "Low Income",
+      total_family_income >= 40000 &
+        total_family_income < 100000 ~ "Middle Income",
+      total_family_income >= 100000 ~ "High Income")
+    )
+
+#creating functions 
+myfirstfunction <- function(x){0.837636 * x}
+
+ data %>%
+  mutate(new_a = myfirstfunction(a), 
+         new_b = myfirstfunction(b),
+         new_c = myfirstfunction(c),
+         new_d = myfirstfunction(d))
+
+
