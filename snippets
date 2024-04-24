@@ -50,3 +50,43 @@ ggplot(data = broom::augment(prediction)) +
   labs(x = "Weight in pounds", y = "Acceleration", color = "Origin") +   # Legend label 
   theme(legend.position = "bottom") # Adjust legend position as needed
 
+
+
+#opening the dataframe
+ames_df = openintro::ames
+ames_df
+
+#filtering all the numerical values from the dataframe
+ames_df_selection <-  ames_df %>%
+  select_if(is.numeric) 
+
+
+
+#creating the input datacolumn name 
+col_names=colnames(ames_df_selection)[-length(colnames(ames_df_selection))]
+
+#creating a input for the model
+input_=paste("price ~",  paste(
+  col_names,
+  collapse = "+"
+))
+
+# Fit the interaction model 
+lm(input_, data = ames_df_selection) -> prediction
+
+ggplot(data = broom::augment(prediction)) +
+  geom_point(aes(x = price, y = .fitted), alpha = 0.6) +  
+  geom_smooth(aes(x = price, y = .fitted), method = "lm", se = FALSE) + 
+  labs(x = "Actual Price", y = "Prediction") + 
+  theme(legend.position = "bottom") 
+
+#making coorelation 
+augment(prediction) %>% 
+  select(price, .fitted) %>% 
+  cor()
+
+
+coef_summary <- summary(prediction)$coefficients
+max_se <- max(coef_summary[, "Std. Error"]) 
+print(coef_summary)
+print(max_se)
