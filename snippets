@@ -93,3 +93,55 @@ max_se <- max(coef_summary[, "Std. Error"])
 print(coef_summary)
 print(max_se)
 
+
+
+
+library(nnet)### get this if you don't
+library(e1071) ## get this if you don't
+
+
+library(ISLR2) 
+library(dplyr)
+library(broom)
+library(caret)
+library(pscl)
+
+# Load Caravan dataset
+data(Caravan)
+
+# Encoding 
+caravan_df <- Caravan %>%
+  mutate(Purchase = ifelse(Purchase == "Yes", 1, 0)) 
+
+# Select features (adjust column names and consider feature selection)
+col_names <- names(caravan_df)[!names(caravan_df) %in% c("Purchase")] 
+input_formula <- as.formula(paste("Purchase ~", paste(col_names, collapse = " + ")))
+
+# Logistic Regression
+glm_model <- glm(input_formula, data = caravan_df, family = "binomial")
+
+
+data_selected <- select(caravan_df, -Purchase)
+data_selected
+
+# Get predictions for the confusion matrix 
+predictions <- predict(glm_model, newdata = data_selected, type = "response")
+predicted_labels <- ifelse(predictions > 0.5, 1, 0) 
+
+
+
+#truth table of the model with the confusion matrix
+# Assuming you have 'predicted_labels' and 'true_labels'
+cm <- confusionMatrix(factor(predicted_labels), factor(caravan_df$Purchase))
+cm
+
+
+#accuracy of the model
+accuracy <- cm$overall["Accuracy"]
+print(accuracy)
+
+
+print("Yes the predictors are coorealted as the there is 94% accuracy")
+
+#rsquare value of the model 
+pR2(glm_model) 
