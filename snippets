@@ -52,6 +52,8 @@ ggplot(data = broom::augment(prediction)) +
 
 
 
+#Q8
+
 #opening the dataframe
 ames_df = openintro::ames
 ames_df
@@ -63,7 +65,7 @@ ames_df_selection <-  ames_df %>%
 
 
 #creating the input datacolumn name 
-col_names=colnames(ames_df_selection)[-length(colnames(ames_df_selection))]
+col_names =colnames(ames_df_selection)[colnames(ames_df_selection) != "price"]
 
 #creating a input for the model
 input_=paste("price ~",  paste(
@@ -90,3 +92,4 @@ coef_summary <- summary(prediction)$coefficients
 max_se <- max(coef_summary[, "Std. Error"]) 
 print(coef_summary)
 print(max_se)
+
