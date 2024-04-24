@@ -1,11 +1,10 @@
 
-
 #importing data manipulation
 library(dplyr)
 library(ggplot2)
 library(tidyverse)
 library(ISLR2)
-
+library(broom)  
 #importing dataset
 Auto =ISLR2::Auto
 
@@ -54,9 +53,7 @@ ggplot(data = broom::augment(prediction)) +
   labs(x = "Weight in pounds", y = "Acceleration")  # Add labels
 
 
-library(ggplot2) 
-library(ggplot2) 
-library(broom)  
+
 
 # Fit the interaction model 
 lm(acceleration ~ weight * car_origin, data = adjusted_auto) -> prediction
@@ -70,4 +67,5 @@ ggplot(data = broom::augment(prediction)) +
 
 
 
+#Q8
 
